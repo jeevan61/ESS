@@ -1,3 +1,29 @@
+const {extractZip} = require('../services/zip.service');
+const fs = require('fs');
+const path = require('path');
+const {parseCSV} = require('../services/csv.service');
+
+function findCSVFiles(dir){
+    let results = [];
+
+    const items = fs.readdirSync(dir);
+
+    for(const item of items){
+        const fullPath = path.join(dir,item);
+        const stat = fs.statSync(fullPath);
+
+        if(stat.isDirectory()){
+            results = results.concat(findCSVFiles(fullPath));
+        }
+        else if(path.extname(item).toLowerCase() === '.csv'){
+            results.push(fullPath);
+        }
+    }
+    return results;
+}
+
+
+
 exports.uploadEmployees = async(req,res) => {
     try{
         
@@ -5,14 +31,34 @@ exports.uploadEmployees = async(req,res) => {
             return res.status(400).json({
                 success : false,
                 
-                message : "No file uploaded"
+                message : "No zip file uploaded"
             });
         }
 
+        const zipPath = req.file.path;
+        const extractedFolder = await extractZip(zipPath);
+        const files = fs.readdirSync(extractedFolder);
+        const parsedData = {};
+        const csvFiles = findCSVFiles(extractedFolder);
+      
+
+    
+
+        for(const filePath of csvFiles){
+           
+               const fileName = path.basename(filePath);
+               const data = await parseCSV(filePath);
+               parsedData[fileName] = data;
+           
+        }
+        
+
+        console.log(parsedData);
         return res.status(200).json({
             success: true,
-            message: "File uploaded successfully",
-            fileInfo : req.file
+            message: "Zip proccessed successfully",
+            fileParsed: Object.keys(parsedData),
+            sample: parsedData[Object.keys(parsedData)[0]]?.slice(0,2)
         });
     }
     catch(err){
