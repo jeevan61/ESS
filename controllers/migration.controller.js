@@ -2,6 +2,7 @@ const {extractZip} = require('../services/zip.service');
 const fs = require('fs');
 const path = require('path');
 const {parseCSV} = require('../services/csv.service');
+const { routeParsedData } = require('../services/router.service');
 
 function findCSVFiles(dir){
     let results = [];
@@ -37,7 +38,7 @@ exports.uploadEmployees = async(req,res) => {
 
         const zipPath = req.file.path;
         const extractedFolder = await extractZip(zipPath);
-        const files = fs.readdirSync(extractedFolder);
+       
         const parsedData = {};
         const csvFiles = findCSVFiles(extractedFolder);
       
@@ -51,14 +52,16 @@ exports.uploadEmployees = async(req,res) => {
                parsedData[fileName] = data;
            
         }
+        const routedData = routeParsedData(parsedData);
         
 
-        console.log(parsedData);
+        
         return res.status(200).json({
             success: true,
             message: "Zip proccessed successfully",
-            fileParsed: Object.keys(parsedData),
-            sample: parsedData[Object.keys(parsedData)[0]]?.slice(0,2)
+            fileParsed: Object.keys(routedData),
+            datasets: Object.keys(routedData),
+            sampleEmployees: routedData.employees?.slice(0,2)
         });
     }
     catch(err){
