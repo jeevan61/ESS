@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const {parseCSV} = require('../services/csv.service');
 const { routeParsedData } = require('../services/router.service');
+const { mapEmployees } = require('../services/mapping.service');
+const { insertEmployees } = require("../repository/employee.repository");
 
 function findCSVFiles(dir){
     let results = [];
@@ -52,16 +54,20 @@ exports.uploadEmployees = async(req,res) => {
                parsedData[fileName] = data;
            
         }
+       
         const routedData = routeParsedData(parsedData);
+        const mappedEmployees = await mapEmployees(routedData.employees);
+        await insertEmployees(mappedEmployees);
         
 
         
         return res.status(200).json({
             success: true,
-            message: "Zip proccessed successfully",
+            message: "Mapping over",
             fileParsed: Object.keys(routedData),
-            datasets: Object.keys(routedData),
-            sampleEmployees: routedData.employees?.slice(0,2)
+            totalEmployees: mappedEmployees.length,
+            inserted: mappedEmployees.length,
+            sample: mappedEmployees.slice(0,2)
         });
     }
     catch(err){
@@ -71,3 +77,4 @@ exports.uploadEmployees = async(req,res) => {
         });
     }
 };
+

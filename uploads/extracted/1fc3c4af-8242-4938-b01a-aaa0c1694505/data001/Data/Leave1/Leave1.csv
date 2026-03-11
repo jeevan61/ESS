@@ -1,9 +1,0 @@
-ZOHO_LINK_ID,"Employee ID","Leave type",From,To,"Days/Hours Taken","Reason for leave","Added By","Added time","Modified By","Modified time","Approval Status",Approver,"Approval Time",Type,"Date - Duration and Session","Reason for cancellation"
-40872000005360001,"Ameyaa Chivukula 56","Earned Leave",09-Mar-2026,13-Mar-2026,"5.0 Day(s)","out of station","56 - Ameyaa - Chivukula","02-Mar-2026 17:04:48","56 - Ameyaa - Chivukula","02-Mar-2026 17:04:48",Approved,"1 Devanathan N","02-Mar-2026 18:29:38",Paid,"{Date:09-Mar-2026,Duration:Full Day},{Date:10-Mar-2026,Duration:Full Day},{Date:11-Mar-2026,Duration:Full Day},{Date:12-Mar-2026,Duration:Full Day},{Date:13-Mar-2026,Duration:Full Day}"
-
-40872000005360001,"Ameyaa Chivukula 56","Casual and Sick Leave",04-Mar-2026,06-Mar-2026,"3.0 Day(s)","Out of station","56 - Ameyaa - Chivukula","02-Mar-2026 17:03:51","56 - Ameyaa - Chivukula","02-Mar-2026 17:03:51",Approved,"1 Devanathan N","02-Mar-2026 18:29:33",Paid,"{Date:04-Mar-2026,Duration:Full Day},{Date:05-Mar-2026,Duration:Full Day},{Date:06-Mar-2026,Duration:Full Day}"
-
-40872000002922099,"Sooraj D 44","Casual and Sick Leave",27-Feb-2026,27-Feb-2026,"1.0 Day(s)","Sick leave","44 - Sooraj - D","01-Mar-2026 23:00:08","44 - Sooraj - D","01-Mar-2026 23:00:08",Approved,"6 Ihsan Arif","02-Mar-2026 10:52:27",Paid,"{Date:27-Feb-2026,Duration:Full Day}"
-
-40872000002922099,"Sooraj D 44","Casual and Sick Leave",24-Feb-2026,24-Feb-2026,"1.0 Day(s)","Sick leave","44 - Sooraj - D","01-Mar-2026 22:59:43","44 - Sooraj - D","01-Mar-2026 22:59:43",Approved,"6 Ihsan Arif","02-Mar-2026 10:52:59",Paid,"{Date:24-Feb-2026,Duration:Full Day}"
-

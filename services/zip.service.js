@@ -9,7 +9,7 @@ const extractZip = (zipFilePath) => {
     const zip = new admzip(zipFilePath);
     const extractFolder = path.join(__dirname,'../uploads/extracted', randomUUID());
     fs.mkdirSync(extractFolder, { recursive: true });
-    zip.extractAllTo(extractFolder, true);
+    zip.extractAllTo(extractFolder);
     return extractFolder;   
     } catch (err) {
         console.log('Error extracting zip file:', err);
