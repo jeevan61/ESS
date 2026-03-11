@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const {parseCSV} = require('../services/csv.service');
 const { routeParsedData } = require('../services/router.service');
-const { mapEmployees } = require('../services/mapping.service');
-const { insertEmployees } = require("../repository/employee.repository");
+const { mapEmployees, mapApplyLeave} = require('../services/mapping.service');
+const { insertEmployees,insertapplyLeave } = require("../repository/employee.repository");
 
 function findCSVFiles(dir){
     let results = [];
@@ -58,6 +58,9 @@ exports.uploadEmployees = async(req,res) => {
         const routedData = routeParsedData(parsedData);
         const mappedEmployees = await mapEmployees(routedData.employees);
         await insertEmployees(mappedEmployees);
+
+        const mappedApplyLeaves = await mapApplyLeave(routedData.leaves);
+        await insertapplyLeave(mappedApplyLeaves);
         
 
         
