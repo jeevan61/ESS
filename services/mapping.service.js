@@ -36,16 +36,31 @@ async function mapEmployees(rows){
     return employees;
 }
 
-async function mapLeaveHistory(rows){
-  
-   
+async function mapLeavesHistory(rows,insertedApplyLeaves){
+   const leavesHistory = [];
+
+   for(let i=0; i<rows.length; i++){
+     
+
+      const applyLeaveRecord = insertedApplyLeaves[i];
+
+      const leaveHistory = {
+         source:{
+            leave_taken: applyLeaveRecord._id,
+         }
+      };
+      leavesHistory.push(leaveHistory);
+
+
+   }
+   return leavesHistory;
 }
 
-async function mapApplyLeave(rows){
+async function mapApplyLeaves(rows){
    const applyLeaves = [];
    for(const row of rows){
      const applyLeave = {
-        status : "approved",
+        status : "Approved",
         source :{
            employee_name: row["Employee ID"]?.match(/[A-Za-z]+/)?.[0],
            //leave_type: await getOrCreate("","",row["Leave type"]) custom query
@@ -64,9 +79,59 @@ async function mapApplyLeave(rows){
    return applyLeaves;
 }
 
+async function mapDepartments(rows){
+   const departments = [];
+   for(const row of rows){
+      const department ={
+         source:{
+            department_name: row["Department Name"],
+         }
+      };
+      departments.push(department);
+   }
+   return departments;
+}
+
+async function mapDesignations(rows){
+   const designations = [];
+   for(const row of rows){
+      const designation ={
+         source:{
+            designation: row["Designation Name"],
+         }
+      };
+      designations.push(designation);
+   }
+   return designations;
+}
+
+async function mapLocations(rows){
+   const locations = [];
+   for(const row of rows){
+      const location ={
+         source:{
+            location_name: row["Location Name"],
+            location_dtls:{
+               address_line_1: row["Description"]
+            }
+
+         }
+      };
+      locations.push(location);
+   }
+      
+   return locations;
+}
+
+
+
 module.exports = {
    mapEmployees,
-   mapApplyLeave
+   mapApplyLeaves,
+   mapLeavesHistory,
+   mapDepartments,
+   mapDesignations,
+   mapLocations
 };
 
 

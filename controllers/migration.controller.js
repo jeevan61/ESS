@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const {parseCSV} = require('../services/csv.service');
 const { routeParsedData } = require('../services/router.service');
-const { mapEmployees, mapApplyLeave} = require('../services/mapping.service');
-const { insertEmployees,insertapplyLeave } = require("../repository/employee.repository");
+const { mapEmployees, mapApplyLeaves,mapLeavesHistory,mapDepartments,mapDesignations,mapLocations} = require('../services/mapping.service');
+const { insertEmployees,insertapplyLeaves,insertLeavesHistory,insertDepartments,insertDesignations,insertLocations } = require("../repository/employee.repository");
 
 function findCSVFiles(dir){
     let results = [];
@@ -59,9 +59,20 @@ exports.uploadEmployees = async(req,res) => {
         const mappedEmployees = await mapEmployees(routedData.employees);
         await insertEmployees(mappedEmployees);
 
-        const mappedApplyLeaves = await mapApplyLeave(routedData.leaves);
-        await insertapplyLeave(mappedApplyLeaves);
+        const mappedApplyLeaves = await mapApplyLeaves(routedData.leaves);
+        await insertapplyLeaves(mappedApplyLeaves);
+
+        const mappedLeavesHistory = await mapLeavesHistory(routedData.leaves,mappedApplyLeaves);
+        await insertLeavesHistory(mappedLeavesHistory);
+
+        const mappedDepartments = await mapDepartments(routedData.departments);
+        await insertDepartments(mappedDepartments);
         
+        const mappedDesignations = await mapDesignations(routedData.designations);
+        await insertDesignations(mappedDesignations);
+
+        const mappedLocations = await mapLocations(routedData.locations);
+        await insertLocations(mappedLocations);
 
         
         return res.status(200).json({
