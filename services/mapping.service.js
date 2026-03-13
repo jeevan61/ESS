@@ -1,10 +1,30 @@
 const { getOrCreate } = require("../repository/dropdown.repository");
 
+
+const processedEmployees = new Set();
+const processedLeavesHistory = new Set();
+const processedApplyLeaves = new Set();
+const processedDepartments = new Set();
+const processedDesignations = new Set();
+const processedLocations = new Set();
+
 async function mapEmployees(rows){
     const employees = [];
     for(const row of rows){
+        const zohoId = row["ZOHO_LINK_ID"];
+
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedEmployees.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedEmployees.add(zohoId);
         const employee = {
           source : {
+               zoho_link_id:zohoId,
                new_employee_details_group :{ 
                     emp_fname: row["First Name"],
                     emp_lname: row["Last Name"],
@@ -38,12 +58,25 @@ async function mapEmployees(rows){
 
 async function mapLeavesHistory(rows,insertedApplyLeaves){
    const leavesHistory = [];
+   let applyLeaveIndex = 0;
 
    for(let i=0; i<rows.length; i++){
-     
 
-      const applyLeaveRecord = insertedApplyLeaves[i];
+      const row = rows[i];
+      const zohoId = row["ZOHO_LINK_ID"];
 
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedLeavesHistory.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedLeavesHistory.add(zohoId);
+
+      const applyLeaveRecord = insertedApplyLeaves[applyLeaveIndex];
+      applyLeaveIndex++;
       const leaveHistory = {
          source:{
             leave_taken: applyLeaveRecord._id,
@@ -59,6 +92,19 @@ async function mapLeavesHistory(rows,insertedApplyLeaves){
 async function mapApplyLeaves(rows){
    const applyLeaves = [];
    for(const row of rows){
+
+     const zohoId = row["ZOHO_LINK_ID"];
+
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedApplyLeaves.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedApplyLeaves.add(zohoId);
+
      const applyLeave = {
         status : "Approved",
         source :{
@@ -82,6 +128,17 @@ async function mapApplyLeaves(rows){
 async function mapDepartments(rows){
    const departments = [];
    for(const row of rows){
+      const zohoId = row["ZOHO_LINK_ID"];
+
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedDepartments.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedDepartments.add(zohoId);
       const department ={
          source:{
             department_name: row["Department Name"],
@@ -95,8 +152,20 @@ async function mapDepartments(rows){
 async function mapDesignations(rows){
    const designations = [];
    for(const row of rows){
+      const zohoId = row["ZOHO_LINK_ID"];
+
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedDesignations.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedDesignations.add(zohoId);
       const designation ={
          source:{
+            zoho_link_id: zohoId,
             designation: row["Designation Name"],
          }
       };
@@ -108,8 +177,21 @@ async function mapDesignations(rows){
 async function mapLocations(rows){
    const locations = [];
    for(const row of rows){
+      const zohoId = row["ZOHO_LINK_ID"];
+
+        if(!zohoId){
+         continue;
+        }
+
+        if(processedLocations.has(zohoId)){
+          console.log("Duplicate detected");
+          continue;
+        }
+        processedLocations.add(zohoId);
       const location ={
          source:{
+            zoho_link_id: zohoId,
+
             location_name: row["Location Name"],
             location_dtls:{
                address_line_1: row["Description"]

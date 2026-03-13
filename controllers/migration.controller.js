@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const {parseCSV} = require('../services/csv.service');
 const { routeParsedData } = require('../services/router.service');
-const { mapEmployees, mapApplyLeaves,mapLeavesHistory,mapDepartments,mapDesignations,mapLocations} = require('../services/mapping.service');
-const { insertEmployees,insertapplyLeaves,insertLeavesHistory,insertDepartments,insertDesignations,insertLocations } = require("../repository/employee.repository");
+const { mapLocations,mapDesignations,mapDepartments} = require('../services/mapping.service');
+const { insertLocations,insertDesignations,insertDepartments } = require("../repository/employee.repository");
 
 function findCSVFiles(dir){
     let results = [];
@@ -56,14 +56,14 @@ exports.uploadEmployees = async(req,res) => {
         }
        
         const routedData = routeParsedData(parsedData);
-        const mappedEmployees = await mapEmployees(routedData.employees);
-        await insertEmployees(mappedEmployees);
+        // const mappedEmployees = await mapEmployees(routedData.employees);
+        // await insertEmployees(mappedEmployees);
 
-        const mappedApplyLeaves = await mapApplyLeaves(routedData.leaves);
-        await insertapplyLeaves(mappedApplyLeaves);
+        // const mappedApplyLeaves = await mapApplyLeaves(routedData.leaves);
+        // await insertapplyLeaves(mappedApplyLeaves);
 
-        const mappedLeavesHistory = await mapLeavesHistory(routedData.leaves,mappedApplyLeaves);
-        await insertLeavesHistory(mappedLeavesHistory);
+        // const mappedLeavesHistory = await mapLeavesHistory(routedData.leaves,mappedApplyLeaves);
+        // await insertLeavesHistory(mappedLeavesHistory);
 
         const mappedDepartments = await mapDepartments(routedData.departments);
         await insertDepartments(mappedDepartments);
@@ -79,9 +79,8 @@ exports.uploadEmployees = async(req,res) => {
             success: true,
             message: "Mapping over",
             fileParsed: Object.keys(routedData),
-            totalEmployees: mappedEmployees.length,
-            inserted: mappedEmployees.length,
-            sample: mappedEmployees.slice(0,2)
+           
+           
         });
     }
     catch(err){
